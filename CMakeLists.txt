@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.10)
+project(FMSH_PAILLIER_DRIVER C)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+add_subdirectory(src)
+add_subdirectory(tests)
