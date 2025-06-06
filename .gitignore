@@ -1,0 +1,5 @@
+bin/
+built/
+data/
+lib/
+run.sh
