@@ -38,7 +38,7 @@
 // Initialization Parameter Address List
 // Range from 0x000 ~ 0x10F
 //----------------------------------------
-#define RAM_IN_NR2_MOD_N2        0x000
+#define RAM_IN_N_MOD_N2          0x000
 #define RAM_IN_R4_MOD_N2         0x020
 #define RAM_IN_QQR2_MOD_N2       0x040
 #define RAM_IN_PPR2_MOD_N2       0x060
@@ -56,4 +56,12 @@
 //----------------------------------------
 #define RAM_IN_PRE_START         0x100
 
+#define RAM_PRE_DATA_0           0x000
+#define RAM_PRE_DATA_1           0x020
+#define RAM_PRE_DATA_2           0x040
+#define RAM_PRE_DATA_3           0x060
+#define RAM_PRE_DATA_4           0x080
+#define RAM_PRE_DATA_5           0x0A0
+#define RAM_PRE_DATA_6           0x0C0
+#define RAM_PRE_DATA_7           0x0E0
 #endif //ADDR_MAP_H

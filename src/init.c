@@ -45,7 +45,7 @@ void sk_initialize(unsigned char* ram_in_buf, const char* p_str, const char* q_s
     mpz_t P2                ;   mpz_init(P2                 );  mpz_mul(P2,P,P);
     mpz_t Q2                ;   mpz_init(Q2                 );  mpz_mul(Q2,Q,Q);
     mpz_t R2                ;   mpz_init(R2                 );  mpz_mul(R2,R,R);
-    mpz_t NR2_MOD_N2        ;   mpz_init(NR2_MOD_N2         );  mpz_mul(NR2_MOD_N2,R2,N); mpz_mod(NR2_MOD_N2,NR2_MOD_N2,N2);
+    mpz_t N_MOD_N2          ;   mpz_init(N_MOD_N2           );  mpz_set(N_MOD_N2  ,N); 
     mpz_t R4_MOD_N2         ;   mpz_init(R4_MOD_N2          );  mpz_mul(R4_MOD_N2,R2,R2); mpz_mod(R4_MOD_N2,R4_MOD_N2,N2);
     mpz_t QQR2_MOD_N2       ;   mpz_init(QQR2_MOD_N2        );  mpz_invert(QQR2_MOD_N2,Q2,P2);mpz_mul(QQR2_MOD_N2,QQR2_MOD_N2,Q2);mpz_mul(QQR2_MOD_N2,QQR2_MOD_N2,R2);mpz_mod(QQR2_MOD_N2,QQR2_MOD_N2,N2);
     mpz_t PPR2_MOD_N2       ;   mpz_init(PPR2_MOD_N2        );  mpz_invert(PPR2_MOD_N2,P2,Q2);mpz_mul(PPR2_MOD_N2,PPR2_MOD_N2,P2);mpz_mul(PPR2_MOD_N2,PPR2_MOD_N2,R2);mpz_mod(PPR2_MOD_N2,PPR2_MOD_N2,N2);
@@ -77,7 +77,7 @@ void sk_initialize(unsigned char* ram_in_buf, const char* p_str, const char* q_s
 
     memset(ram_in_buf,0,8192);
 
-    mpz2ram_buf(ram_in_buf+(RAM_IN_NR2_MOD_N2        << 4),NR2_MOD_N2       ,1,512,SMALL_END);
+    mpz2ram_buf(ram_in_buf+(RAM_IN_N_MOD_N2          << 4),N_MOD_N2         ,1,512,SMALL_END);
     mpz2ram_buf(ram_in_buf+(RAM_IN_R4_MOD_N2         << 4),R4_MOD_N2        ,1,512,SMALL_END);
     mpz2ram_buf(ram_in_buf+(RAM_IN_QQR2_MOD_N2       << 4),QQR2_MOD_N2      ,1,512,SMALL_END);
     mpz2ram_buf(ram_in_buf+(RAM_IN_PPR2_MOD_N2       << 4),PPR2_MOD_N2      ,1,512,SMALL_END);
@@ -149,7 +149,7 @@ void pk_initialize(unsigned char* ram_in_buf, const char* n_str, const char* h_s
     mpz_t N                 ;   mpz_init(N                  );  mpz_set_str(N,n_str,16);
     mpz_t N2                ;   mpz_init(N2                 );  mpz_mul(N2,N,N);
     mpz_t R2                ;   mpz_init(R2                 );  mpz_mul(R2,R,R);
-    mpz_t NR2_MOD_N2        ;   mpz_init(NR2_MOD_N2         );  mpz_mul(NR2_MOD_N2,R2,N); mpz_mod(NR2_MOD_N2,NR2_MOD_N2,N2);
+    mpz_t N_MOD_N2          ;   mpz_init(N_MOD_N2           );  mpz_set(N_MOD_N2  ,N); 
     mpz_t R4_MOD_N2         ;   mpz_init(R4_MOD_N2          );  mpz_mul(R4_MOD_N2,R2,R2); mpz_mod(R4_MOD_N2,R4_MOD_N2,N2);
     mpz_t R2_MOD_N          ;   mpz_init(R2_MOD_N           );  mpz_mod(R2_MOD_N,R2,N);
     mpz_t N_INV_MOD_R       ;   mpz_init(N_INV_MOD_R        );  mpz_invert(N_INV_MOD_R,N,R);
@@ -165,7 +165,7 @@ void pk_initialize(unsigned char* ram_in_buf, const char* n_str, const char* h_s
 
     memset(ram_in_buf,0,8192);
 
-    mpz2ram_buf(ram_in_buf+(RAM_IN_NR2_MOD_N2        << 4),NR2_MOD_N2       ,1,512,SMALL_END);
+    mpz2ram_buf(ram_in_buf+(RAM_IN_N_MOD_N2          << 4),N_MOD_N2         ,1,512,SMALL_END);
     mpz2ram_buf(ram_in_buf+(RAM_IN_R4_MOD_N2         << 4),R4_MOD_N2        ,1,512,SMALL_END);
     mpz2ram_buf(ram_in_buf+(RAM_IN_R2_MOD_N          << 4),R2_MOD_N         ,1,256,SMALL_END);
     mpz2ram_buf(ram_in_buf+(RAM_IN_N_INV_MOD_R       << 4),N_INV_MOD_R      ,1,256,SMALL_END);
