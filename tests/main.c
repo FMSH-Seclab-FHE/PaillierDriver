@@ -13,6 +13,7 @@ int main(void){
     gmp_randstate_t grt;
     gmp_randinit_default (grt);
     //test_paillier_enc_ncrt_final(grt, DATA_LEN, n, hs);
-    test_paillier_dec_crt_final (grt, DATA_LEN, p, q, n, hs);
+    //test_paillier_dec_crt_final (grt, DATA_LEN, p, q, n, hs);
+    test_paillier_windowsPath();
 }
 

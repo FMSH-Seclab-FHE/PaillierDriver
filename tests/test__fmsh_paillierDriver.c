@@ -175,3 +175,37 @@ void test_paillier_dec_crt_final(gmp_randstate_t grt, int data_len, const unsign
     close(right_fd);
     close(fpga_fd);
 }
+
+void test_paillier_windowsPath(void){
+    unsigned char bytes_buffer[256 * 32 * 16];
+    unsigned char nothing[16] = {0};
+    int i, j, device, rc;
+    mpz_t one_word;
+    mpz_t one;
+    mpz_init(one_word);
+    mpz_init(one);
+    mpz_set_str(one_word, "0", 16);
+    mpz_set_str(one,      "1", 16);
+    for(i = 0; i < 256 * 32; i++){
+        mpz2ram_buf(bytes_buffer+ (i << 4), one_word, 1, 16, SMALL_END);
+        mpz_add(one_word, one_word, one);
+    }
+
+    device = open_host2FpgaChannel(1);
+    if(device == -1){
+        printf("[Error] paillier_encrypt_ncrt: Device open error\n");
+        return;
+    }
+    rc = write_from_host_to_fpga(device, DDR1_ADDR, bytes_buffer, 256 * 32 * 16);
+    if(rc == -1) { 
+        printf("write core bram_addr wrong\n\n");
+    }
+    rc = write_from_host_to_fpga(device, clusteri_windows_path_config_addr[0], (unsigned char*)&ConfWindowPath_data_0, 32);
+    if(rc == -1) { 
+        printf("write core bram_addr wrong\n\n");
+    }
+    rc = write_from_host_to_fpga(device, clusteri_windows_path_start_addr[0], nothing, 16);
+    if(rc == -1) { 
+        printf("write core bram_addr wrong\n\n");
+    }
+}

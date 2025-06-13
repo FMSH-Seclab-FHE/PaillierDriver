@@ -52,6 +52,30 @@ off_t clusteri_corei_fifo_addr[3][16] = {
 off_t cluster_core_broadcast_fifo_addr = 0x00000000ff7f0000;
 
 
+off_t clusteri_windows_path_start_addr[3] = {
+    0x0000000000820000,
+    0x0000000001820000,
+    0x0000000002820000,
+};
+off_t clusteri_windows_path_config_addr[3] = {
+    0x0000000000830000,
+    0x0000000001830000,
+    0x0000000002830000,
+};
+
+ConfWindowPath ConfWindowPath_data_0 = {
+    .coreReqNum     = 64,   
+    .nextReqNum     = 1,   
+    .nextWdsLen     = 8192,   
+    .startAddr      = 0,    
+    .reserved0      = {0},
+    .axiAddrMask    = 0x003fffff,  
+    .axiAddrAdd     = 0x00004000,   
+    .axiAddrLow     = 0x00000000,   
+    .reserved1      = {0}
+};
+
+
 int open_host2FpgaChannel(int i){
     int rc;
     switch (i)
