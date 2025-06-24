@@ -22,21 +22,21 @@
 // #define RAM_IN_OP2_PONG          0x0C0
 
 // Constant Data Address List
-// Range from 0x180 ~ 0x1FF
+// Range from 0x120 ~ 0x1FF
 //----------------------------------------
-#define RAM_IN_N2_PRIME          0x100
-#define RAM_IN_N_PRIME           0x120
-#define RAM_IN_P2_PRIME          0x130
-#define RAM_IN_Q2_PRIME          0x140
+#define RAM_IN_N2_PRIME          0x120
+#define RAM_IN_N_PRIME           0x140
+#define RAM_IN_P2_PRIME          0x150
+#define RAM_IN_Q2_PRIME          0x160
 #define RAM_IN_N2                0x180
 #define RAM_IN_N                 0x1A0
 #define RAM_IN_P2                0x1B0
 #define RAM_IN_Q2                0x1C0
 #define RAM_IN_HS                0x1D0
-#define RAM_IN_ZERO              0x1F0
+
 
 // Initialization Parameter Address List
-// Range from 0x000 ~ 0x10F
+// Range from 0x000 ~ 0x11F
 //----------------------------------------
 #define RAM_IN_N_MOD_N2          0x000
 #define RAM_IN_R4_MOD_N2         0x020
@@ -50,7 +50,7 @@
 #define RAM_IN_N_INV_MOD_R       0x0D0
 #define RAM_IN_RMU_INV_MOD_N     0x0E0
 #define RAM_IN_ONE               0x0F0
-
+#define RAM_IN_ZERO              0x100
 // Pre-Calculated Data Address List
 // Range from 0x100 ~ 0x17F
 //----------------------------------------
