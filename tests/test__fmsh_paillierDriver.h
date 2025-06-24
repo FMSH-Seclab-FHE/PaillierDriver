@@ -23,6 +23,8 @@ void test_paillier_enc_ncrt_final(gmp_randstate_t grt, int data_len, const unsig
 
 void test_paillier_dec_crt_final(gmp_randstate_t grt, int data_len, const unsigned char *p, const unsigned char *q, const unsigned char *n, const unsigned char *hs);
 
+void test_paillier_scale_mul_final(gmp_randstate_t grt, int data_len, const unsigned char * n, const unsigned char* hs);
+
 void test_paillier_windowsPath(void);
 
 #ifdef __cplusplus

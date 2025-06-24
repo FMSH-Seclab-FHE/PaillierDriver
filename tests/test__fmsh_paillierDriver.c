@@ -63,7 +63,7 @@ void test_paillier_enc_ncrt_final(gmp_randstate_t grt, int data_len, const unsig
             flag = 0;
         }
     }
-    if(flag = 1){
+    if(flag == 1){
         printf("test_paillier_enc_ncrt_final : right\n");
     }
     else{
@@ -176,8 +176,89 @@ void test_paillier_dec_crt_final(gmp_randstate_t grt, int data_len, const unsign
     close(fpga_fd);
 }
 
+void test_paillier_scale_mul_final(gmp_randstate_t grt, int data_len, const unsigned char * n, const unsigned char* hs){
+    int i;
+    int cnt = 0;
+    unsigned char* m;
+    unsigned char* c_old;
+    unsigned char* c_fpga;
+    unsigned char* c_right;
+    int flag = 1;
+
+    m       = (unsigned char* )malloc(sizeof(unsigned char) * data_len * 256);
+    c_old   = (unsigned char* )malloc(sizeof(unsigned char) * data_len * 512);
+    c_fpga  = (unsigned char* )malloc(sizeof(unsigned char) * data_len * 512);
+    c_right = (unsigned char* )malloc(sizeof(unsigned char) * data_len * 512);
+
+    if(m == NULL || c_old == NULL || c_fpga == NULL || c_right == NULL){
+        perror("malloc failed");
+        return;
+    }
+
+    int c_right_fd = open("/home/zhangchi/ldw_prj/fmsh_paillier/data/scale_mul_right.bin", O_RDWR | O_CREAT | O_TRUNC, 0666);
+    int c_fpga_fd  = open("/home/zhangchi/ldw_prj/fmsh_paillier/data/scale_mul_fpga.bin",  O_RDWR | O_CREAT | O_TRUNC, 0666);
+
+    if(c_right_fd < 0 || c_fpga_fd < 0){
+        perror("open file failed");
+        return;
+    }
+
+    //initial core
+    paillier_scale_mul_inital(n, hs);
+
+    //golden data
+    mpz_t N             ;       mpz_init(N              );
+    mpz_t res           ;       mpz_init(res            );
+    mpz_t HS            ;       mpz_init(HS              );
+    mpz_set_str(N, n, 16);
+    mpz_set_str(HS ,hs, 16);
+    mpz_t N2                ;   mpz_init(N2                 );  mpz_mul(N2,N,N);
+    mpz_t plaintext         ;   mpz_init(plaintext);
+    mpz_t cipher_old        ;   mpz_init(cipher_old); 
+    for(i = 0; i < data_len; i++){
+        //gen_random(plaintext,  2048, grt);
+        //gen_random(cipher_old, 4096, grt);
+        mpz_set_str(plaintext, "1", 16);
+        mpz_set_str(cipher_old, "ff", 16);
+        mpz2ram_buf(m     + i * 256, plaintext,  1, 256,SMALL_END);
+        mpz2ram_buf(c_old + i * 512, cipher_old, 1, 512,SMALL_END);
+        mpz_powm(res,cipher_old,plaintext,N2);
+        mpz2ram_buf(c_right + i * 512, res, 1, 512, SMALL_END);
+    }
+
+    //fpga computation
+    paillier_scale_mul_final(c_fpga, c_old, m, data_len);
+    for(i = 0; i < data_len * 512; i++){
+        if(c_right[i] != c_fpga[i]){
+            printf("right : %d. fpga: %d\n", c_right[i], c_fpga[i]);
+            flag = 0;
+        }
+    }
+    if(flag == 1){
+        printf("test_paillier_scale_mul_final : right\n");
+    }
+    else{
+        printf("test_paillier_scale_mul_final : wrong\n");
+    }
+
+    write(c_right_fd, c_right, data_len * 512);
+    write(c_fpga_fd,  c_fpga,  data_len * 512);
+    free(m);
+    free(c_old);
+    free(c_fpga);
+    free(c_right);
+    mpz_clear(N);
+    mpz_clear(res);
+    mpz_clear(HS);
+    mpz_clear(N2);
+    mpz_clear(plaintext);
+    mpz_clear(cipher_old); 
+    close(c_right_fd);
+    close(c_fpga_fd);
+}
+
 void test_paillier_windowsPath(void){
-    unsigned char bytes_buffer[256 * 32 * 16];
+    unsigned char bytes_buffer[256 * ALL_BYTES_LEN_ENC_NCRT];
     unsigned char nothing[16] = {0};
     int i, j, device, rc;
     mpz_t one_word;
@@ -186,21 +267,26 @@ void test_paillier_windowsPath(void){
     mpz_init(one);
     mpz_set_str(one_word, "0", 16);
     mpz_set_str(one,      "1", 16);
-    for(i = 0; i < 256 * 32; i++){
-        mpz2ram_buf(bytes_buffer+ (i << 4), one_word, 1, 16, SMALL_END);
-        mpz_add(one_word, one_word, one);
-    }
-
     device = open_host2FpgaChannel(1);
     if(device == -1){
         printf("[Error] paillier_encrypt_ncrt: Device open error\n");
         return;
     }
-    rc = write_from_host_to_fpga(device, DDR1_ADDR, bytes_buffer, 256 * 32 * 16);
+    for(i = 0; i < WINDOWS_NUM; i++){
+        for(j = 0; j < 256 * 32; j++){
+            mpz2ram_buf(bytes_buffer+ (j << 4), one_word, 1, 16, SMALL_END);
+            mpz_add(one_word, one_word, one);
+        }
+        rc = write_from_host_to_fpga(device, ((uint64_t)DDR1_ADDR + ((uint64_t)i * 256ULL * ALL_BYTES_LEN_ENC_NCRT)), bytes_buffer, 256 * ALL_BYTES_LEN_ENC_NCRT);
+        if(rc == -1) { 
+            printf("write core bram_addr wrong\n\n");
+        }
+    }
+    rc = write_from_host_to_fpga(device, clusteri_windows_path_config_addr[0], (unsigned char*)&ConfWindowPath_data_0, 32);
     if(rc == -1) { 
         printf("write core bram_addr wrong\n\n");
     }
-    rc = write_from_host_to_fpga(device, clusteri_windows_path_config_addr[0], (unsigned char*)&ConfWindowPath_data_0, 32);
+    rc = write_from_host_to_fpga(device, clusteri_windows_path_config_addr[0] + (off_t)32, (unsigned char*)&ConfWindowPath_data_1, 32);
     if(rc == -1) { 
         printf("write core bram_addr wrong\n\n");
     }
