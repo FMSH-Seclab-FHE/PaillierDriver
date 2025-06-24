@@ -1,5 +1,6 @@
 bin/
-built/
+build/
 data/
 lib/
+python_script/
 run.sh

@@ -24,16 +24,21 @@ extern off_t clusteri_corei_fifo_addr[3][16];
 extern off_t cluster_core_broadcast_fifo_addr;
 extern off_t clusteri_windows_path_start_addr[3];
 extern off_t clusteri_windows_path_config_addr[3];
+
+
 typedef struct {
-    uint8_t  coreReqNum;     // Byte  0
-    uint8_t  nextReqNum;     // Byte  1
-    uint16_t nextWdsLen;     // Byte  2~3
-    uint16_t startAddr;      // Byte  4~5
-    uint8_t  reserved0[10];  // Byte  6~15
-    uint32_t axiAddrMask;    // Byte 16~19
-    uint32_t axiAddrAdd;     // Byte 20~23
-    uint32_t axiAddrLow;     // Byte 24~27
-    uint8_t  reserved1[4];   // Byte 28~31
+    //128bit 0
+    uint8_t  coreReqNum;     // Byte   0
+    uint8_t  nextReqNum;     // Byte   1
+    uint16_t nextWdsLen;     // Byte   2~3
+    uint16_t startAddr;      // Byte   4~5
+    uint8_t  reserved0[10];  // Byte   6~15
+ 
+    //128bit 1 
+    uint32_t axiAddrMask;    // Byte   0~3
+    uint32_t axiAddrAdd;     // Byte   4~7
+    uint32_t axiAddrLow;     // Byte   8~11
+    uint8_t  reserved1[4];   // Byte  12~15
 } __attribute__((packed)) ConfWindowPath;
 extern ConfWindowPath ConfWindowPath_data_0;
 

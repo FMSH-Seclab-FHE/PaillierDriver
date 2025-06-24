@@ -62,7 +62,6 @@ off_t clusteri_windows_path_config_addr[3] = {
     0x0000000001830000,
     0x0000000002830000,
 };
-
 ConfWindowPath ConfWindowPath_data_0 = {
     .coreReqNum     = 64,   
     .nextReqNum     = 1,   
