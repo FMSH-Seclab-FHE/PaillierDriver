@@ -1,5 +1,5 @@
 //
-// Created by zhangchi on 24-11-27.
+// Created by douwei lei on 2025-March-01.
 //
 
 #include "paillier_intf.h"

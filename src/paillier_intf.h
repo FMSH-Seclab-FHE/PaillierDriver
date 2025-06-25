@@ -1,11 +1,9 @@
 //
-// Created by zhangchi on 24-11-27.
+// Created by douwei lei on 2025-March-01.
 //
 
 #ifndef PAILLIER_INTF_H
 #define PAILLIER_INTF_H
-
-
 
 #ifdef __cplusplus
 extern "C"{
